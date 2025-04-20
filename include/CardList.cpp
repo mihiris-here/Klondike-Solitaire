@@ -22,6 +22,48 @@ void CardDoublyLinkedList::append(Card* cards, int size) {
     }
 }
 
+void CardDoublyLinkedList::appendList(const CardDoublyLinkedList& other) {
+    Node* current = other.head;
+    while (current) {
+        append(current->card); // Reuse single-card append
+        current = current->next;
+    }
+}
+
+void CardDoublyLinkedList::splitList(CardDoublyLinkedList& other, char suit, char rank) {
+    Node* current = head;
+
+    while (current) {
+        if (current->card.suit == suit && current->card.rank == rank and current->card.donotshow == false) {
+            // Found the match — start the split here
+
+            // Detach the previous part of the list
+            if (current->prev) {
+                current->prev->next = nullptr;
+                tail = current->prev;
+                current->prev = nullptr;
+            } else {
+                // Match is at the head — whole list is moving
+                head = nullptr;
+                tail = nullptr;
+            }
+
+            // Transfer nodes starting from current to `other`
+            Node* moveNode = current;
+            while (moveNode) {
+                other.append(moveNode->card); // Copy card to other list
+                Node* temp = moveNode;
+                moveNode = moveNode->next;
+                delete temp; // Free the node from original list
+            }
+
+            break; // Done splitting
+        }
+
+        current = current->next;
+    }
+}
+
 void CardDoublyLinkedList::printForward() const {
     Node* current = head;
     while (current) {

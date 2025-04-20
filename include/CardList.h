@@ -27,7 +27,13 @@ public:
     
     // Append multiple cards from an array
     void append(Card* cards, int size);
+
+    // Append another CardDoublyLinkedList to the tail
+    void appendList(const CardDoublyLinkedList& other);
     
+    // Split linked list by adding to other
+    void splitList(CardDoublyLinkedList& other, char suit, char rank);
+
     // Print list from front to back
     void printForward() const;
     
